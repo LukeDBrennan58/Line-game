@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Line_game_project2
+namespace Line_game_project3
 {
     public class Game1 : Game
     {
@@ -58,10 +58,12 @@ namespace Line_game_project2
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 red.movement.Y = -1;
-            } else if (Keyboard.GetState().IsKeyDown(Keys.S))
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
                 red.movement.Y = 1;
-            } else
+            }
+            else
             {
                 red.movement.Y = 0;
             }
@@ -79,13 +81,15 @@ namespace Line_game_project2
                 red.movement.X = 0;
             }
 
+            red.move();
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(new Color(0, 15, 2));
-            
+
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(redSprite, red.pos, null, Color.White, 0, new Vector2(), 0.01f, new SpriteEffects(), 0);
@@ -116,7 +120,8 @@ namespace Line_game_project2
                 {
                     spd = 3;
                     pos = new Vector2(screenWidth / 4, screenHeight / 2);
-                } else if (col == "blue")
+                }
+                else if (col == "blue")
                 {
                     spd = 3;
                     pos = new Vector2(screenWidth * 3 / 4, screenHeight / 2);
@@ -126,9 +131,9 @@ namespace Line_game_project2
 
             public void move()
             {
-                float angleOffset = (float)(1 / Math.Sqrt(Math.Abs(movement.X) + Math.Abs(movement.Y)));
-                pos.X += movement.X * angleOffset;
-                pos.Y += movement.Y * angleOffset;
+                float angleOffset = 1;//(float)(1 / Math.Sqrt(Math.Abs(movement.X) + Math.Abs(movement.Y)));
+                pos.X += movement.X * spd * angleOffset;
+                pos.Y += movement.Y * spd * angleOffset;
             }
 
         }
