@@ -15,14 +15,12 @@ namespace Line_game_project3
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D redSprite;
-        Texture2D blueSprite;
-
         public static float screenHeight;
         public static float screenWidth;
 
         public Character red;
         public Character blue;
+        public GameObject redLine;
 
         bool testvar = true;
 
@@ -41,6 +39,7 @@ namespace Line_game_project3
 
             red = new Character("red");
             blue = new Character("blue");
+            redLine = new GameObject();
 
             base.Initialize();
         }
@@ -49,8 +48,8 @@ namespace Line_game_project3
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            redSprite = Content.Load<Texture2D>("red-player");
-            blueSprite = Content.Load<Texture2D>("blue-player");
+            red.sprite = Content.Load<Texture2D>("red-player");
+            blue.sprite = Content.Load<Texture2D>("blue-player");
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,8 +58,9 @@ namespace Line_game_project3
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            playerController(red);
-            playerController(blue);
+            movementController(red);
+            redController();
+            movementController(blue);
 
 
             if(Keyboard.GetState().IsKeyDown(Keys.Space) && testvar)
@@ -82,14 +82,14 @@ namespace Line_game_project3
 
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(redSprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
-            _spriteBatch.Draw(blueSprite, blue.pos, null, Color.White, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
+            _spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
+            _spriteBatch.Draw(blue.sprite, blue.pos, null, Color.White, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        protected void playerController(Character character)
+        protected void movementController(Character character)
         {
             KeyboardState keys = Keyboard.GetState();
 
@@ -143,60 +143,9 @@ namespace Line_game_project3
             }
         }
 
-        public class Character
+        protected void redController()
         {
-            public Dictionary<string, Keys> mKeys = new Dictionary<string, Keys>();
-
-            public string col;
-            public float spd;
-            public Vector2 pos;
-            public float rot;
-
-            public Vector2 movement;
-
-            public Character(string col)
-            {
-                this.col = col;
-                movement = new Vector2(0, 0);
-
-                if (col == "red")
-                {
-                    mKeys.Add("up", Keys.W);
-                    mKeys.Add("down", Keys.S);
-                    mKeys.Add("right", Keys.D);
-                    mKeys.Add("left", Keys.A);
-
-                    spd = 4;
-                    pos = new Vector2(screenWidth / 4, screenHeight / 2);
-
-                    rot = (float)Math.PI / 2;
-                }
-                else if (col == "blue")
-                {
-                    mKeys.Add("up", Keys.I);
-                    mKeys.Add("down", Keys.K);
-                    mKeys.Add("right", Keys.L);
-                    mKeys.Add("left", Keys.J);
-
-                    spd = 4;
-                    pos = new Vector2(screenWidth * 3 / 4, screenHeight / 2);
-
-                    rot = (float)Math.PI * 3 / 2;
-                }
-            }
-
-            public void move()
-            {
-                float angleOffset = Math.Abs(movement.X) + Math.Abs(movement.Y) == 2 ? 0.7071f : 1f;
-                pos.X += movement.X * spd * angleOffset;
-                pos.Y += movement.Y * spd * angleOffset;
-
-                if(!(movement.X == 0 && movement.Y == 0))
-                {
-                    rot = (float)(Math.Atan2(movement.Y, movement.X) + Math.PI / 2);
-                }
-            }
-
+             
         }
     }
 }
