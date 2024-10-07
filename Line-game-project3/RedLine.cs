@@ -9,9 +9,12 @@ namespace Line_game_project3
 {
     public class RedLine : GameObject
     {
-        RedLine(Vector2 pos)
+        public int length;
+
+        public RedLine(Character red)
         {
-            this.pos = pos;
+            pos = red.pos;
+            length = 0;
         }
     }
 }
