@@ -16,5 +16,8 @@ namespace Line_game_project3
         public float spd;
         public float rot;
         public Vector2 movement;
+
+        public bool action1 = false;
+        public bool action2 = false;
     }
 }

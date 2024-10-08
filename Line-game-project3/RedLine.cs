@@ -13,6 +13,7 @@ namespace Line_game_project3
 
         public RedLine(Character red)
         {
+            spd = red.spd/6;
             pos = red.pos;
             length = 0;
         }
