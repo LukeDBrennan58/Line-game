@@ -174,12 +174,12 @@ namespace Line_game_project3
         protected void updateLine()
         {
             redLine.length = (int)Vector2.Distance(red.pos, redLine.pos);
-            //var stretch = (float)Math.Pow(1.01, redLine.length / 2);
-            //if(redLine.length != 0)
-            //{
-            //    redLine.pos.X += redLine.spd * (red.pos.X - redLine.pos.X) * stretch / redLine.length;
-            //    redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
-            //}
+            var stretch = (float)Math.Pow(1.01, redLine.length / 2);
+            if (redLine.length != 0)
+            {
+                redLine.pos.X += redLine.spd * (red.pos.X - redLine.pos.X) * stretch / redLine.length;
+                redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
+            }
         }
     }
 }
