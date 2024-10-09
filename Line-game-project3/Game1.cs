@@ -66,6 +66,7 @@ namespace Line_game_project3
             movementController(blue);
 
             updateLine();
+            calculateBlueOnLine();
 
             if(Keyboard.GetState().IsKeyDown(Keys.C) && !red.action1)
             {
@@ -78,15 +79,7 @@ namespace Line_game_project3
                 red.action1 = false;
             }
 
-            if(Keyboard.GetState().IsKeyDown(Keys.Space) && testvar)
-            {
-                //red.rot += (float)Math.PI/2;
-                testvar = false;
-            }
-            if(!Keyboard.GetState().IsKeyDown(Keys.Space) && !testvar)
-            {
-                testvar = true;
-            }
+
 
             base.Update(gameTime);
         }
@@ -162,19 +155,31 @@ namespace Line_game_project3
             }
         }
 
+        protected void calculateBlueOnLine()
+        {
+            
+            var area = Math.Abs((0.5) *
+                (red.pos.X * (redLine.pos.Y - blue.pos.Y)
+                + redLine.pos.X * (blue.pos.Y - red.pos.Y)
+                + blue.pos.X * (red.pos.Y - redLine.pos.Y)));
+            if(area / redLine.length < 5.5f
+                    && (Util.IsBetween(blue.pos.X, red.pos.X, redLine.pos.X)
+                    || Util.IsBetween(blue.pos.Y, red.pos.Y, redLine.pos.Y)))
+            {
+                //TODO: Blue dies
+            } 
 
+        }
 
         protected void updateLine()
         {
             redLine.length = (int)Vector2.Distance(red.pos, redLine.pos);
-            var stretch = (float)Math.Pow(1.01, redLine.length / 2);
-            if(redLine.length != 0)
-            {
-                redLine.pos.X += redLine.spd * (red.pos.X - redLine.pos.X) * stretch / redLine.length;
-                redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
-            }
-
-            Debug.Write(redLine.pos);
+            //var stretch = (float)Math.Pow(1.01, redLine.length / 2);
+            //if(redLine.length != 0)
+            //{
+            //    redLine.pos.X += redLine.spd * (red.pos.X - redLine.pos.X) * stretch / redLine.length;
+            //    redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
+            //}
         }
     }
 }
