@@ -110,7 +110,7 @@ namespace Line_game_project3
                 updateMovement(0, null);
             }
 
-            character.move();
+            character.Move();
 
             void updateMovement(Nullable<int> x, Nullable<int> y)
             {

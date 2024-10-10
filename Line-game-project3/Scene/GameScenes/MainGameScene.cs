@@ -13,6 +13,7 @@ using MonoGame.Extended.Timers;
 using Microsoft.Xna.Framework.Content;
 using Scene;
 using Line_game_project3;
+using System.Diagnostics;
 
 namespace Scene.GameScenes
 {
@@ -20,7 +21,6 @@ namespace Scene.GameScenes
     {
         private ContentManager contentManager;
         private SceneManager sceneManager;
-
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -30,6 +30,8 @@ namespace Scene.GameScenes
         public Character red;
         public Character blue;
         public RedLine redLine;
+
+        public bool gameGoing;
 
         private Color testColor;
 
@@ -43,6 +45,8 @@ namespace Scene.GameScenes
         {
             testColor = Color.White;
 
+            gameGoing = true;
+
             screenHeight = Game1.screenHeight;
             screenWidth = Game1.screenWidth;
 
@@ -55,19 +59,21 @@ namespace Scene.GameScenes
         }
         public void Update(GameTime gameTime)
         {
+            if(gameGoing)
+            {
+                red.MovementController();
+                blue.MovementController();
+                redLine.UpdateLine();
+            }
 
-            movementController(red);
-            movementController(blue);
-
-            updateLine();
             calculateBlueOnLine();
+
+            Debug.Write(gameGoing + " " + red.spd);
 
             if (Keyboard.GetState().IsKeyDown(Keys.C) && !red.action1)
             {
                 red.action1 = true;
-                var temp = redLine.pos;
-                redLine.pos = red.pos;
-                red.pos = temp;
+                (red.pos, redLine.pos) = (redLine.pos, red.pos);
             }
             else if (!Keyboard.GetState().IsKeyDown(Keys.C) && red.action1)
             {
@@ -81,62 +87,13 @@ namespace Scene.GameScenes
             spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
             spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
             spriteBatch.DrawLine(redLine.pos, red.pos, Color.Red, 1, 0);
+
+            if(!gameGoing)
+            {
+                //Died text
+            }
             spriteBatch.End();
 
-        }
-
-        protected void movementController(Character character)
-        {
-            KeyboardState keys = Keyboard.GetState();
-
-
-            if (keys.IsKeyDown(character.mKeys["up"]) && keys.IsKeyDown(character.mKeys["down"]))
-            {
-                updateMovement(null, 0);
-            }
-            else if (keys.IsKeyDown(character.mKeys["up"]))
-            {
-                updateMovement(null, -1);
-            }
-            else if (keys.IsKeyDown(character.mKeys["down"]))
-            {
-                updateMovement(null, 1);
-            }
-            else
-            {
-                updateMovement(null, 0);
-            }
-
-            if (keys.IsKeyDown(character.mKeys["right"]) && keys.IsKeyDown(character.mKeys["left"]))
-            {
-                updateMovement(0, null);
-            }
-            else if (keys.IsKeyDown(character.mKeys["right"]))
-            {
-                updateMovement(1, null);
-            }
-            else if (keys.IsKeyDown(character.mKeys["left"]))
-            {
-                updateMovement(-1, null);
-            }
-            else
-            {
-                updateMovement(0, null);
-            }
-
-            character.move();
-
-            void updateMovement(int? x, int? y)
-            {
-                if (x != null)
-                {
-                    character.movement.X = (int)x;
-                }
-                else if (y != null)
-                {
-                    character.movement.Y = (int)y;
-                }
-            }
         }
 
         protected void calculateBlueOnLine()
@@ -146,35 +103,27 @@ namespace Scene.GameScenes
                 (red.pos.X * (redLine.pos.Y - blue.pos.Y)
                 + redLine.pos.X * (blue.pos.Y - red.pos.Y)
                 + blue.pos.X * (red.pos.Y - redLine.pos.Y)));
-            if (redLine.length != 0
+            if (gameGoing
+                    && redLine.length != 0
                     && area / redLine.length < 5.5f
                     && Util.IsBetween(blue.pos.X, red.pos.X, redLine.pos.X)
                     && Util.IsBetween(blue.pos.Y, red.pos.Y, redLine.pos.Y))
             {
                 //testColor = Color.Black;
-                sceneManager.ChangeScene(new MenuScene(contentManager, sceneManager));
+                gameGoing = false;
             }
             else
             {
                 //testColor = Color.White;
             }
+
+            if(!gameGoing
+                    && Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                sceneManager.ChangeScene(new MenuScene(contentManager, sceneManager));
+            }
             
 
         }
-
-        protected void updateLine()
-        {
-            redLine.length = (int)Vector2.Distance(red.pos, redLine.pos);
-            var stretch = (float)Math.Pow(1.01, redLine.length / 2);
-            if (redLine.length != 0)
-            {
-                redLine.pos.X += redLine.spd * (red.pos.X - redLine.pos.X) * stretch / redLine.length;
-                redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
-            }
-        }
-
-
-
-
     }
 }

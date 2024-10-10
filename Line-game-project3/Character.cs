@@ -44,7 +44,7 @@ namespace Line_game_project3
             }
         }
 
-        public void move()
+        public void Move()
         {
             float angleOffset = Math.Abs(movement.X) + Math.Abs(movement.Y) == 2 ? 0.7071f : 1f;
             pos.X += movement.X * spd * angleOffset;
@@ -56,5 +56,58 @@ namespace Line_game_project3
             }
         }
 
+        public void MovementController()
+        {
+            KeyboardState keys = Keyboard.GetState();
+
+
+            if (keys.IsKeyDown(mKeys["up"]) && keys.IsKeyDown(mKeys["down"]))
+            {
+                updateMovement(null, 0);
+            }
+            else if (keys.IsKeyDown(mKeys["up"]))
+            {
+                updateMovement(null, -1);
+            }
+            else if (keys.IsKeyDown(mKeys["down"]))
+            {
+                updateMovement(null, 1);
+            }
+            else
+            {
+                updateMovement(null, 0);
+            }
+
+            if (keys.IsKeyDown(mKeys["right"]) && keys.IsKeyDown(mKeys["left"]))
+            {
+                updateMovement(0, null);
+            }
+            else if (keys.IsKeyDown(mKeys["right"]))
+            {
+                updateMovement(1, null);
+            }
+            else if (keys.IsKeyDown(mKeys["left"]))
+            {
+                updateMovement(-1, null);
+            }
+            else
+            {
+                updateMovement(0, null);
+            }
+
+            Move();
+
+            void updateMovement(int? x, int? y)
+            {
+                if (x != null)
+                {
+                    movement.X = (int)x;
+                }
+                else if (y != null)
+                {
+                    movement.Y = (int)y;
+                }
+            }
+        }
     }
 }
