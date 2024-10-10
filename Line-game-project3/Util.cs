@@ -13,7 +13,7 @@ namespace Line_game_project3
         {
             var min = Math.Min(a, b);
             var max = Math.Max(a, b);
-            return x > min && x < max;
+            return x > min - 10 && x < max + 10;
         }
     }
 }

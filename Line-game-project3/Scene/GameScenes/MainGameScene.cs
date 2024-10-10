@@ -3,19 +3,24 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
 using MonoGame.Extended;
 using MonoGame.Extended.VectorDraw;
+using MonoGame.Extended.Timers;
+using Microsoft.Xna.Framework.Content;
 using Scene;
-using Scene.GameScenes;
+using Line_game_project3;
 
-namespace Line_game_project3
+namespace Scene.GameScenes
 {
-    public class Game1 : Game
+    public class MainGameScene : IScene
     {
+        private ContentManager contentManager;
+        private SceneManager sceneManager;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -26,49 +31,58 @@ namespace Line_game_project3
         public Character blue;
         public RedLine redLine;
 
-        public SceneManager sceneManager;
+        private Color testColor;
 
-        public Game1()
+        public MainGameScene(ContentManager contentManager, SceneManager sceneManager)
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-
-            sceneManager = new();
-
+            this.contentManager = contentManager;
+            this.sceneManager = sceneManager;
         }
 
-        protected override void Initialize()
+        public void Load()
         {
-            screenHeight = GraphicsDevice.Viewport.Bounds.Height;
-            screenWidth = GraphicsDevice.Viewport.Bounds.Width;
+            testColor = Color.White;
 
-            base.Initialize();
+            screenHeight = Game1.screenHeight;
+            screenWidth = Game1.screenWidth;
+
+            red = new Character("red");
+            blue = new Character("blue");
+            redLine = new RedLine(red);
+
+            red.sprite = contentManager.Load<Texture2D>("red-player");
+            blue.sprite = contentManager.Load<Texture2D>("blue-player");
         }
-
-        protected override void LoadContent()
+        public void Update(GameTime gameTime)
         {
 
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            movementController(red);
+            movementController(blue);
 
-            sceneManager.ChangeScene(new MenuScene(Content, sceneManager));
+            updateLine();
+            calculateBlueOnLine();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.C) && !red.action1)
+            {
+                red.action1 = true;
+                var temp = redLine.pos;
+                redLine.pos = red.pos;
+                red.pos = temp;
+            }
+            else if (!Keyboard.GetState().IsKeyDown(Keys.C) && red.action1)
+            {
+                red.action1 = false;
+            }
+
         }
-
-        protected override void Update(GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
+            spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
+            spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
+            spriteBatch.DrawLine(redLine.pos, red.pos, Color.Red, 1, 0);
+            spriteBatch.End();
 
-            sceneManager.GetCurrentScene().Update(gameTime);
-
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(new Color(0, 15, 2));
-
-            sceneManager.GetCurrentScene().Draw(_spriteBatch);
-
-            base.Draw(gameTime);
         }
 
         protected void movementController(Character character)
@@ -112,9 +126,9 @@ namespace Line_game_project3
 
             character.move();
 
-            void updateMovement(Nullable<int> x, Nullable<int> y)
+            void updateMovement(int? x, int? y)
             {
-                if (x != null) 
+                if (x != null)
                 {
                     character.movement.X = (int)x;
                 }
@@ -127,17 +141,24 @@ namespace Line_game_project3
 
         protected void calculateBlueOnLine()
         {
-            
-            var area = Math.Abs((0.5) *
+
+            var area = Math.Abs(0.5 *
                 (red.pos.X * (redLine.pos.Y - blue.pos.Y)
                 + redLine.pos.X * (blue.pos.Y - red.pos.Y)
                 + blue.pos.X * (red.pos.Y - redLine.pos.Y)));
-            if(area / redLine.length < 5.5f
-                    && (Util.IsBetween(blue.pos.X, red.pos.X, redLine.pos.X)
-                    || Util.IsBetween(blue.pos.Y, red.pos.Y, redLine.pos.Y)))
+            if (redLine.length != 0
+                    && area / redLine.length < 5.5f
+                    && Util.IsBetween(blue.pos.X, red.pos.X, redLine.pos.X)
+                    && Util.IsBetween(blue.pos.Y, red.pos.Y, redLine.pos.Y))
             {
-                //TODO: Blue dies
-            } 
+                //testColor = Color.Black;
+                sceneManager.ChangeScene(new MenuScene(contentManager, sceneManager));
+            }
+            else
+            {
+                //testColor = Color.White;
+            }
+            
 
         }
 
@@ -151,5 +172,9 @@ namespace Line_game_project3
                 redLine.pos.Y += redLine.spd * (red.pos.Y - redLine.pos.Y) * stretch / redLine.length;
             }
         }
+
+
+
+
     }
 }
