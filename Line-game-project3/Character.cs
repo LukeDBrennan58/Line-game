@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,9 +12,11 @@ namespace Line_game_project3
     {
         public Dictionary<string, Keys> mKeys = new Dictionary<string, Keys>();
         public string col;
+        public short score;
 
         public Character(string col)
         {
+            this.score = 0;
             this.col = col;
             movement = new Vector2(0, 0);
 

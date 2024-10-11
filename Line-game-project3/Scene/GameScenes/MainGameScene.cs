@@ -21,15 +21,16 @@ namespace Scene.GameScenes
     {
         private ContentManager contentManager;
         private SceneManager sceneManager;
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
 
-        public static float screenHeight;
-        public static float screenWidth;
+        private static float screenHeight;
+        private static float screenWidth;
 
         public Character red;
         public Character blue;
+        public HashSet<Coin> coins;
         public RedLine redLine;
+
+        public Texture2D coinSprite;
 
         public bool gameGoing;
 
@@ -39,6 +40,8 @@ namespace Scene.GameScenes
         {
             this.contentManager = contentManager;
             this.sceneManager = sceneManager;
+
+            coins = new HashSet<Coin>();
         }
 
         public void Load()
@@ -52,10 +55,13 @@ namespace Scene.GameScenes
 
             red = new Character("red");
             blue = new Character("blue");
+            
             redLine = new RedLine(red);
 
             red.sprite = contentManager.Load<Texture2D>("red-player");
             blue.sprite = contentManager.Load<Texture2D>("blue-player");
+            coinSprite = contentManager.Load<Texture2D>("coin");
+            
         }
         public void Update(GameTime gameTime)
         {
@@ -64,11 +70,10 @@ namespace Scene.GameScenes
                 red.MovementController();
                 blue.MovementController();
                 redLine.UpdateLine();
+                CoinController.CoinLogic(gameTime.TotalGameTime.TotalMilliseconds, blue);
             }
 
             calculateBlueOnLine();
-
-            Debug.Write(gameGoing + " " + red.spd);
 
             if (Keyboard.GetState().IsKeyDown(Keys.C) && !red.action1)
             {
@@ -87,6 +92,10 @@ namespace Scene.GameScenes
             spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
             spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
             spriteBatch.DrawLine(redLine.pos, red.pos, Color.Red, 1, 0);
+            foreach(Coin coin in CoinController.coins)
+            {
+                spriteBatch.Draw(coinSprite, coin.pos, null, Color.White, 0, new Vector2(10, 10), 1, new SpriteEffects(), 0);
+            }
 
             if(!gameGoing)
             {
