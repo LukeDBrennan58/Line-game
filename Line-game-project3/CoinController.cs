@@ -14,6 +14,11 @@ namespace Line_game_project3
 
         public static HashSet<Coin> coins = new HashSet<Coin>();
 
+        private static Vector2 coinSpawnTime = Settings.vectors["CoinSpawnTime"];
+        private static int coinSpawnMargin = Settings.numbers["Margin1"];
+        private static int uiMargin = Settings.numbers["Margin2"];
+        private static int spawnBuffer = Settings.numbers["SpawnBuffer"];
+
         public static void CoinLogic(double time, Character blue)
         {
             CoinSpawner(time, blue.pos);
@@ -22,7 +27,7 @@ namespace Line_game_project3
 
         private static void CoinSpawner(double time, Vector2 bluePos)
         {
-            if (time - lastCoinTime > 2500 && coins.Count < 4)
+            if (time - lastCoinTime > new Random().Next((int)coinSpawnTime.X, (int)coinSpawnTime.Y) && coins.Count < 4)
             {
                 totalCoinsSpawned += 1;
                 lastCoinTime = time;
@@ -34,11 +39,11 @@ namespace Line_game_project3
         private static void SpawnCoin(Vector2 bluePos)
         {
             Random random = new();
-            int x = random.Next(10, (int)Game1.screenWidth - 10);
-            int y = random.Next(10, (int)Game1.screenHeight - 10);
+            int x = random.Next(coinSpawnMargin, (int)Game1.screenWidth - coinSpawnMargin);
+            int y = random.Next(coinSpawnMargin, (int)Game1.screenHeight - coinSpawnMargin);
             Vector2 coinPos = new(x, y);
 
-            if (Vector2.Distance(bluePos, coinPos) < 100)
+            if (Vector2.Distance(bluePos, coinPos) < spawnBuffer)
             {
                 SpawnCoin(bluePos);
             }
@@ -52,7 +57,7 @@ namespace Line_game_project3
         {
             foreach(Coin coin in coins)
             {
-                if(Vector2.Distance(coin.pos, blue.pos) < 25)
+                if(Vector2.Distance(coin.pos, blue.pos) < uiMargin)
                 {
                     blue.score += 1;
                     blue.life = (short)Math.Min(blue.life + 4000, 10000);

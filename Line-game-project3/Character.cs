@@ -17,10 +17,13 @@ namespace Line_game_project3
         public short score;
         public short life;
 
-        public Character(string col)
+        private static short maxLife = (short)Settings.numbers["MaxLife"];
+        private static short lifeDec = (short)Settings.numbers["LifeDec"];
+
+        public Character(string col) : base()
         {
             this.score = 0;
-            this.life = 10000;
+            this.life = maxLife;
             this.col = col;
             movement = new Vector2(0, 0);
 
@@ -104,22 +107,22 @@ namespace Line_game_project3
             Move();
             if(col == "blue")
             {
-                if(pos.X > Game1.screenWidth + 15)
+                if(pos.X > Game1.screenWidth + oRadius)
                 {
-                    pos.X = -15;
+                    pos.X = -1 * oRadius;
                 }
-                else if(pos.X < -15)
+                else if(pos.X < -1 * oRadius)
                 {
-                    pos.X = Game1.screenWidth + 15;
+                    pos.X = Game1.screenWidth + oRadius;
                 }
 
-                if(pos.Y > Game1.screenHeight + 15)
+                if(pos.Y > Game1.screenHeight + oRadius)
                 {
-                    pos.Y = -15;
+                    pos.Y = -1 * oRadius;
                 }
-                else if(pos.Y < -15)
+                else if(pos.Y < -1 * oRadius)
                 {
-                    pos.Y = Game1.screenHeight + 15;
+                    pos.Y = Game1.screenHeight + oRadius;
                 }
             }
 
@@ -138,7 +141,7 @@ namespace Line_game_project3
 
         public void UpdateLife()
         {
-            life -= 20;
+            life -= lifeDec;
 
             if(life <= 0)
             {

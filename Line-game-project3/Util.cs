@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace Line_game_project3
             var min = Math.Min(a, b);
             var max = Math.Max(a, b);
             return x > min - 10 && x < max + 10;
+        }
+
+        public static Vector2 PointToVector(Point point)
+        {
+            return new Vector2(point.X, point.Y);
         }
     }
 }

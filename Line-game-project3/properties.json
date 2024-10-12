@@ -1,0 +1,17 @@
+{
+  "ui": {
+    "margin1": 50,
+    "margin2": 25
+  },
+  "player": {
+    "maxLife": 10000,
+    "lifeDec": 20
+  },
+  "coin": {
+    "spawnBuffer": 100,
+    "coinSpawnTime": {
+      "X": 2200,
+      "Y":  2600
+    }
+  }
+}

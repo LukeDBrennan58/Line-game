@@ -42,7 +42,7 @@ namespace Line_game_project3
         {
             screenHeight = GraphicsDevice.Viewport.Bounds.Height;
             screenWidth = GraphicsDevice.Viewport.Bounds.Width;
-
+            JsonManager.Start();
             base.Initialize();
         }
 

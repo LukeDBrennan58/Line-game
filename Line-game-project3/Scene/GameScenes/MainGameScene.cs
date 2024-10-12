@@ -27,6 +27,7 @@ namespace Scene.GameScenes
 
         public Character red;
         public Character blue;
+        public Coin coinP;
         public HashSet<Coin> coins;
         public RedLine redLine;
 
@@ -57,12 +58,13 @@ namespace Scene.GameScenes
 
             red = new Character("red");
             blue = new Character("blue");
-            
+
+            coinP = new Coin();
             redLine = new RedLine(red);
 
-            red.sprite = contentManager.Load<Texture2D>("red-player");
-            blue.sprite = contentManager.Load<Texture2D>("blue-player");
-            coinSprite = contentManager.Load<Texture2D>("coin");
+            red.SetSprite(contentManager.Load<Texture2D>("red-player"));
+            blue.SetSprite(contentManager.Load<Texture2D>("blue-player"));
+            coinP.SetSprite(contentManager.Load<Texture2D>("coin"));
             font1 = contentManager.Load<SpriteFont>("font1");
 
             CoinController.lastCoinTime = mainGameStartTime;
@@ -95,12 +97,12 @@ namespace Scene.GameScenes
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
-            spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, new Vector2(13, 23), 1, new SpriteEffects(), 0);
+            spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, red.GetCenterOffset(), 1, new SpriteEffects(), 0);
+            spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, blue.GetCenterOffset(), 1, new SpriteEffects(), 0);
             spriteBatch.DrawLine(redLine.pos, red.pos, Color.Red, 1, 0);
             foreach(Coin coin in CoinController.coins)
             {
-                spriteBatch.Draw(coinSprite, coin.pos, null, Color.White, 0, new Vector2(10, 10), 1, new SpriteEffects(), 0);
+                spriteBatch.Draw(coinP.sprite, coin.pos, null, Color.White, 0, coinP.GetCenterOffset(), 1, new SpriteEffects(), 0);
             }
 
             if(gameGoing)

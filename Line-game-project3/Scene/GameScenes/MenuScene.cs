@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended;
 
 namespace Scene.GameScenes
 {
@@ -16,6 +17,12 @@ namespace Scene.GameScenes
         private ContentManager contentManager;
         private SceneManager sceneManager;
 
+        private float screenWidth;
+        private float screenHeight;
+
+        private int button1Width;
+        private int button1Height;
+
         public MenuScene(ContentManager contentManager, SceneManager sceneManager)
         {
             this.contentManager = contentManager;
@@ -23,7 +30,11 @@ namespace Scene.GameScenes
         }
         public void Load()
         {
-            //nothing
+            screenHeight = Game1.screenHeight;
+            screenWidth = Game1.screenWidth;
+
+            button1Width = 100;
+            button1Height = 50;
         }
         public void Update(GameTime gameTime)
         {
@@ -35,7 +46,7 @@ namespace Scene.GameScenes
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            //nothing
+            //spriteBatch.DrawRectangle(new RectangleF());
         }
 
 
