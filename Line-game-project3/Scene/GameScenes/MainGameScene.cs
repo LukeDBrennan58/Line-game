@@ -31,8 +31,10 @@ namespace Scene.GameScenes
         public RedLine redLine;
 
         public Texture2D coinSprite;
+        public SpriteFont font1;
 
-        public bool gameGoing;
+        public static double mainGameStartTime;
+        public static bool gameGoing;
 
         private Color testColor;
 
@@ -61,6 +63,9 @@ namespace Scene.GameScenes
             red.sprite = contentManager.Load<Texture2D>("red-player");
             blue.sprite = contentManager.Load<Texture2D>("blue-player");
             coinSprite = contentManager.Load<Texture2D>("coin");
+            font1 = contentManager.Load<SpriteFont>("font1");
+
+            CoinController.lastCoinTime = mainGameStartTime;
             
         }
         public void Update(GameTime gameTime)
@@ -70,6 +75,7 @@ namespace Scene.GameScenes
                 red.MovementController();
                 blue.MovementController();
                 redLine.UpdateLine();
+                blue.UpdateLife();
                 CoinController.CoinLogic(gameTime.TotalGameTime.TotalMilliseconds, blue);
             }
 
@@ -97,9 +103,12 @@ namespace Scene.GameScenes
                 spriteBatch.Draw(coinSprite, coin.pos, null, Color.White, 0, new Vector2(10, 10), 1, new SpriteEffects(), 0);
             }
 
-            if(!gameGoing)
+            if(gameGoing)
             {
-                //Died text
+                spriteBatch.DrawLine(new Vector2(screenWidth * 2 / 3 - 50, screenHeight - 25),
+                    new Vector2((screenWidth * 2 / 3) - 50 + (screenWidth / 3) * blue.life / 10000, screenHeight - 25),
+                    Color.Blue, 3, 0);
+                spriteBatch.DrawString(font1, blue.score.ToString(), new Vector2(screenWidth - 25, screenHeight - 25), Color.Blue);
             }
             spriteBatch.End();
 
@@ -129,10 +138,15 @@ namespace Scene.GameScenes
             if(!gameGoing
                     && Keyboard.GetState().IsKeyDown(Keys.Space))
             {
+                Clean();
                 sceneManager.ChangeScene(new MenuScene(contentManager, sceneManager));
             }
             
 
+        }
+        private void Clean()
+        {
+            CoinController.Clean();
         }
     }
 }

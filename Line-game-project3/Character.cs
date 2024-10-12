@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Scene.GameScenes;
+using System.Diagnostics;
 
 namespace Line_game_project3
 {
@@ -13,10 +15,12 @@ namespace Line_game_project3
         public Dictionary<string, Keys> mKeys = new Dictionary<string, Keys>();
         public string col;
         public short score;
+        public short life;
 
         public Character(string col)
         {
             this.score = 0;
+            this.life = 10000;
             this.col = col;
             movement = new Vector2(0, 0);
 
@@ -98,6 +102,26 @@ namespace Line_game_project3
             }
 
             Move();
+            if(col == "blue")
+            {
+                if(pos.X > Game1.screenWidth + 15)
+                {
+                    pos.X = -15;
+                }
+                else if(pos.X < -15)
+                {
+                    pos.X = Game1.screenWidth + 15;
+                }
+
+                if(pos.Y > Game1.screenHeight + 15)
+                {
+                    pos.Y = -15;
+                }
+                else if(pos.Y < -15)
+                {
+                    pos.Y = Game1.screenHeight + 15;
+                }
+            }
 
             void updateMovement(int? x, int? y)
             {
@@ -109,6 +133,16 @@ namespace Line_game_project3
                 {
                     movement.Y = (int)y;
                 }
+            }
+        }
+
+        public void UpdateLife()
+        {
+            life -= 20;
+
+            if(life <= 0)
+            {
+                MainGameScene.gameGoing = false;
             }
         }
     }

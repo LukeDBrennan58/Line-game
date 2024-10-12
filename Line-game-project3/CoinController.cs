@@ -22,7 +22,7 @@ namespace Line_game_project3
 
         private static void CoinSpawner(double time, Vector2 bluePos)
         {
-            if (time - lastCoinTime > 5000)
+            if (time - lastCoinTime > 2500 && coins.Count < 4)
             {
                 totalCoinsSpawned += 1;
                 lastCoinTime = time;
@@ -55,10 +55,16 @@ namespace Line_game_project3
                 if(Vector2.Distance(coin.pos, blue.pos) < 25)
                 {
                     blue.score += 1;
+                    blue.life = (short)Math.Min(blue.life + 4000, 10000);
                     coins.Remove(coin);
                     break;
                 }
             }
+        }
+
+        public static void Clean()
+        {
+            coins.Clear();
         }
     }
 }

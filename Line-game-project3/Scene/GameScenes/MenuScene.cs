@@ -29,6 +29,7 @@ namespace Scene.GameScenes
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
+                MainGameScene.mainGameStartTime = gameTime.TotalGameTime.Milliseconds;
                 sceneManager.ChangeScene(new MainGameScene(contentManager, sceneManager));
             }
         }
