@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Line_game_project3
+namespace Tools
 {
     public class JsonProps
     {
@@ -16,7 +16,15 @@ namespace Line_game_project3
         public static void Start()
         {
             string file = "properties.json";
-            string json = File.ReadAllText(file);
+            string json;
+            if (File.Exists(file))
+            {
+                json = File.ReadAllText(file);
+            }
+            else
+            {
+                throw new FileNotFoundException("properties.json file is missing");
+            }
 
             JsonDocument doc = JsonDocument.Parse(json);
             root = doc.RootElement;

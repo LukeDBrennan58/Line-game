@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Scene.GameScenes;
 using System.Diagnostics;
+using Tools;
 
-namespace Line_game_project3
+namespace Object
 {
     public class Character : GameObject
     {
@@ -22,8 +23,8 @@ namespace Line_game_project3
 
         public Character(string col) : base()
         {
-            this.score = 0;
-            this.life = maxLife;
+            score = 0;
+            life = maxLife;
             this.col = col;
             movement = new Vector2(0, 0);
 
@@ -105,22 +106,22 @@ namespace Line_game_project3
             }
 
             Move();
-            if(col == "blue")
+            if (col == "blue")
             {
-                if(pos.X > Util.GetScreen().X + oRadius)
+                if (pos.X > Util.GetScreen().X + oRadius)
                 {
                     pos.X = -1 * oRadius;
                 }
-                else if(pos.X < -1 * oRadius)
+                else if (pos.X < -1 * oRadius)
                 {
                     pos.X = Util.GetScreen().X + oRadius;
                 }
 
-                if(pos.Y > Util.GetScreen().Y + oRadius)
+                if (pos.Y > Util.GetScreen().Y + oRadius)
                 {
                     pos.Y = -1 * oRadius;
                 }
-                else if(pos.Y < -1 * oRadius)
+                else if (pos.Y < -1 * oRadius)
                 {
                     pos.Y = Util.GetScreen().Y + oRadius;
                 }
@@ -143,7 +144,7 @@ namespace Line_game_project3
         {
             life -= lifeDec;
 
-            if(life <= 0)
+            if (life <= 0)
             {
                 MainGameScene.gameGoing = false;
             }

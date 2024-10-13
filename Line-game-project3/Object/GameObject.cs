@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tools;
 
-namespace Line_game_project3
+namespace Object
 {
     public class GameObject
     {
@@ -31,9 +32,9 @@ namespace Line_game_project3
         public void SetSprite(Texture2D sprite)
         {
             this.sprite = sprite;
-            this.dim = Util.PointToVector(sprite.Bounds.Size);
-            this.radius = dim.X / 2;
-            this.oRadius = radius * 1.25f;
+            dim = Util.PointToVector(sprite.Bounds.Size);
+            radius = dim.X / 2;
+            oRadius = radius * 1.25f;
         }
         public Vector2 GetCenterOffset()
         {

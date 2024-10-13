@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Line_game_project3
+namespace Object
 {
     public class RedLine : GameObject
     {
@@ -15,7 +15,7 @@ namespace Line_game_project3
         public RedLine(Character red)
         {
             this.red = red;
-            spd = red.spd/8;
+            spd = red.spd / 8;
             pos = red.pos;
             length = 0;
         }

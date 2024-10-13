@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Tools;
 
-namespace Line_game_project3
+namespace Controller
 {
     public class CoinController
     {
@@ -71,7 +73,7 @@ namespace Line_game_project3
 
         private void Detection(Character blue)
         {
-            foreach(Coin coin in coins)
+            foreach (Coin coin in coins)
             {
                 if (Vector2.Distance(coin.pos, blue.pos) < coin.radius + blue.radius)
                 {

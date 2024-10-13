@@ -11,6 +11,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.VectorDraw;
 using Scene;
 using Scene.GameScenes;
+using Object;
+using Tools;
 
 namespace Line_game_project3
 {

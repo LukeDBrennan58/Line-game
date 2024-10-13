@@ -12,8 +12,10 @@ using MonoGame.Extended.VectorDraw;
 using MonoGame.Extended.Timers;
 using Microsoft.Xna.Framework.Content;
 using Scene;
-using Line_game_project3;
 using System.Diagnostics;
+using Object;
+using Tools;
+using Controller;
 
 namespace Scene.GameScenes
 {

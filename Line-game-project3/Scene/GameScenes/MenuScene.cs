@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Line_game_project3;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
+using Object;
+using Tools;
 
 namespace Scene.GameScenes
 {
@@ -20,8 +21,7 @@ namespace Scene.GameScenes
         private float screenWidth;
         private float screenHeight;
 
-        private int button1Width;
-        private int button1Height;
+        private Button button1;
 
         public MenuScene(ContentManager contentManager, SceneManager sceneManager)
         {
@@ -33,8 +33,7 @@ namespace Scene.GameScenes
             screenHeight = Util.GetScreen().Y;
             screenWidth = Util.GetScreen().X;
 
-            button1Width = 100;
-            button1Height = 50;
+            button1 = new((int)screenWidth / 2, (int)screenHeight * 3 / 5, 180, 60);
         }
         public void Update(GameTime gameTime)
         {
@@ -46,7 +45,9 @@ namespace Scene.GameScenes
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.DrawRectangle(new RectangleF());
+            spriteBatch.Begin();
+            spriteBatch.DrawRectangle(button1.GetRectangle(), button1.color, 3);
+            spriteBatch.End();
         }
 
 

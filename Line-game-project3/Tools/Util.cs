@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Line_game_project3
+namespace Tools
 {
     public class Util
     {
