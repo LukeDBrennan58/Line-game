@@ -30,8 +30,8 @@ namespace Scene.GameScenes
         }
         public void Load()
         {
-            screenHeight = Game1.screenHeight;
-            screenWidth = Game1.screenWidth;
+            screenHeight = Util.GetScreen().Y;
+            screenWidth = Util.GetScreen().X;
 
             button1Width = 100;
             button1Height = 50;

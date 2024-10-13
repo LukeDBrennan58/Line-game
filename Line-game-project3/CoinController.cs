@@ -1,31 +1,47 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Line_game_project3
 {
     public class CoinController
     {
-        public static int totalCoinsSpawned = 0;
-        public static double lastCoinTime = 0;
+        public int totalCoinsSpawned;
+        public double lastCoinTime;
 
-        public static HashSet<Coin> coins = new HashSet<Coin>();
+        public HashSet<Coin> coins;
+        public Coin coinP;
 
-        private static Vector2 coinSpawnTime = Settings.vectors["CoinSpawnTime"];
-        private static int coinSpawnMargin = Settings.numbers["Margin1"];
-        private static int uiMargin = Settings.numbers["Margin2"];
-        private static int spawnBuffer = Settings.numbers["SpawnBuffer"];
+        private Vector2 coinSpawnTime;
+        private readonly int spawnBuffer;
+        private readonly int coinSpawnMargin;
+        private readonly int uiMargin;
 
-        public static void CoinLogic(double time, Character blue)
+        public CoinController()
+        {
+            totalCoinsSpawned = 0;
+            lastCoinTime = 0;
+
+            coins = new HashSet<Coin>();
+
+            coinSpawnTime = JsonProps.GetVector("coin", "coinSpawnTime");
+            spawnBuffer = JsonProps.GetInt("coin", "spawnBuffer");
+            coinSpawnMargin = JsonProps.GetInt("ui", "margin1");
+            uiMargin = JsonProps.GetInt("ui", "margin2");
+        }
+
+        public void CoinLogic(double time, Character blue)
         {
             CoinSpawner(time, blue.pos);
             Detection(blue);
         }
 
-        private static void CoinSpawner(double time, Vector2 bluePos)
+        private void CoinSpawner(double time, Vector2 bluePos)
         {
             if (time - lastCoinTime > new Random().Next((int)coinSpawnTime.X, (int)coinSpawnTime.Y) && coins.Count < 4)
             {
@@ -36,11 +52,11 @@ namespace Line_game_project3
 
         }
 
-        private static void SpawnCoin(Vector2 bluePos)
+        private void SpawnCoin(Vector2 bluePos)
         {
             Random random = new();
-            int x = random.Next(coinSpawnMargin, (int)Game1.screenWidth - coinSpawnMargin);
-            int y = random.Next(coinSpawnMargin, (int)Game1.screenHeight - coinSpawnMargin);
+            int x = random.Next(coinSpawnMargin, (int)Util.GetScreen().X - coinSpawnMargin);
+            int y = random.Next(coinSpawnMargin, (int)Util.GetScreen().Y - coinSpawnMargin);
             Vector2 coinPos = new(x, y);
 
             if (Vector2.Distance(bluePos, coinPos) < spawnBuffer)
@@ -49,15 +65,15 @@ namespace Line_game_project3
             }
             else
             {
-                coins.Add(new Coin(coinPos));
+                coins.Add(new Coin(coinPos, coinP));
             }
         }
 
-        private static void Detection(Character blue)
+        private void Detection(Character blue)
         {
             foreach(Coin coin in coins)
             {
-                if(Vector2.Distance(coin.pos, blue.pos) < uiMargin)
+                if (Vector2.Distance(coin.pos, blue.pos) < coin.radius + blue.radius)
                 {
                     blue.score += 1;
                     blue.life = (short)Math.Min(blue.life + 4000, 10000);
@@ -67,7 +83,7 @@ namespace Line_game_project3
             }
         }
 
-        public static void Clean()
+        public void Clean()
         {
             coins.Clear();
         }

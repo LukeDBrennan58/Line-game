@@ -19,9 +19,6 @@ namespace Line_game_project3
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public static float screenHeight;
-        public static float screenWidth;
-
         public Character red;
         public Character blue;
         public RedLine redLine;
@@ -40,9 +37,8 @@ namespace Line_game_project3
 
         protected override void Initialize()
         {
-            screenHeight = GraphicsDevice.Viewport.Bounds.Height;
-            screenWidth = GraphicsDevice.Viewport.Bounds.Width;
-            JsonManager.Start();
+            Util.SetScreen(GraphicsDevice);
+            JsonProps.Start();
             base.Initialize();
         }
 

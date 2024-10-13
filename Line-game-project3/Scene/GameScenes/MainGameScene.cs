@@ -31,6 +31,8 @@ namespace Scene.GameScenes
         public HashSet<Coin> coins;
         public RedLine redLine;
 
+        private CoinController coinController;
+
         public Texture2D coinSprite;
         public SpriteFont font1;
 
@@ -44,30 +46,32 @@ namespace Scene.GameScenes
             this.contentManager = contentManager;
             this.sceneManager = sceneManager;
 
+            Vector2 screen = Util.GetScreen();
+            screenWidth = screen.X;
+            screenHeight = screen.Y;
+
             coins = new HashSet<Coin>();
+            testColor = Color.White;
+            gameGoing = true;
+
         }
 
         public void Load()
         {
-            testColor = Color.White;
-
-            gameGoing = true;
-
-            screenHeight = Game1.screenHeight;
-            screenWidth = Game1.screenWidth;
-
             red = new Character("red");
             blue = new Character("blue");
 
-            coinP = new Coin();
             redLine = new RedLine(red);
+            coinP = new Coin();
+            coinController = new CoinController();
 
             red.SetSprite(contentManager.Load<Texture2D>("red-player"));
             blue.SetSprite(contentManager.Load<Texture2D>("blue-player"));
             coinP.SetSprite(contentManager.Load<Texture2D>("coin"));
             font1 = contentManager.Load<SpriteFont>("font1");
 
-            CoinController.lastCoinTime = mainGameStartTime;
+            coinController.lastCoinTime = mainGameStartTime;
+            coinController.coinP = coinP;
             
         }
         public void Update(GameTime gameTime)
@@ -78,7 +82,7 @@ namespace Scene.GameScenes
                 blue.MovementController();
                 redLine.UpdateLine();
                 blue.UpdateLife();
-                CoinController.CoinLogic(gameTime.TotalGameTime.TotalMilliseconds, blue);
+                coinController.CoinLogic(gameTime.TotalGameTime.TotalMilliseconds, blue);
             }
 
             calculateBlueOnLine();
@@ -100,7 +104,7 @@ namespace Scene.GameScenes
             spriteBatch.Draw(red.sprite, red.pos, null, Color.White, red.rot, red.GetCenterOffset(), 1, new SpriteEffects(), 0);
             spriteBatch.Draw(blue.sprite, blue.pos, null, testColor, blue.rot, blue.GetCenterOffset(), 1, new SpriteEffects(), 0);
             spriteBatch.DrawLine(redLine.pos, red.pos, Color.Red, 1, 0);
-            foreach(Coin coin in CoinController.coins)
+            foreach(Coin coin in coinController.coins)
             {
                 spriteBatch.Draw(coinP.sprite, coin.pos, null, Color.White, 0, coinP.GetCenterOffset(), 1, new SpriteEffects(), 0);
             }
@@ -148,7 +152,7 @@ namespace Scene.GameScenes
         }
         private void Clean()
         {
-            CoinController.Clean();
+            coinController.Clean();
         }
     }
 }

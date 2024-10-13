@@ -12,8 +12,12 @@ namespace Line_game_project3
     public class Coin : GameObject
     {
 
-        public Coin(Vector2 pos)
+        public Coin(Vector2 pos, Coin coinP)
         {
+            this.sprite = coinP.sprite;
+            this.radius = coinP.radius;
+            this.oRadius = coinP.oRadius;
+            this.dim = coinP.dim;
             this.pos = pos;
         }
 

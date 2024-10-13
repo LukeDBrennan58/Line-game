@@ -17,8 +17,8 @@ namespace Line_game_project3
         public short score;
         public short life;
 
-        private static short maxLife = (short)Settings.numbers["MaxLife"];
-        private static short lifeDec = (short)Settings.numbers["LifeDec"];
+        private static readonly short maxLife = (short)JsonProps.GetInt("player", "maxLife");
+        private static readonly short lifeDec = (short)JsonProps.GetInt("player", "lifeDec");
 
         public Character(string col) : base()
         {
@@ -35,7 +35,7 @@ namespace Line_game_project3
                 mKeys.Add("left", Keys.A);
 
                 spd = 4;
-                pos = new Vector2(Game1.screenWidth / 4, Game1.screenHeight / 2);
+                pos = new Vector2(Util.GetScreen().X / 4, Util.GetScreen().Y / 2);
 
                 rot = (float)Math.PI / 2;
             }
@@ -47,7 +47,7 @@ namespace Line_game_project3
                 mKeys.Add("left", Keys.J);
 
                 spd = 4;
-                pos = new Vector2(Game1.screenWidth * 3 / 4, Game1.screenHeight / 2);
+                pos = new Vector2(Util.GetScreen().X * 3 / 4, Util.GetScreen().Y / 2);
 
                 rot = (float)Math.PI * 3 / 2;
             }
@@ -107,22 +107,22 @@ namespace Line_game_project3
             Move();
             if(col == "blue")
             {
-                if(pos.X > Game1.screenWidth + oRadius)
+                if(pos.X > Util.GetScreen().X + oRadius)
                 {
                     pos.X = -1 * oRadius;
                 }
                 else if(pos.X < -1 * oRadius)
                 {
-                    pos.X = Game1.screenWidth + oRadius;
+                    pos.X = Util.GetScreen().X + oRadius;
                 }
 
-                if(pos.Y > Game1.screenHeight + oRadius)
+                if(pos.Y > Util.GetScreen().Y + oRadius)
                 {
                     pos.Y = -1 * oRadius;
                 }
                 else if(pos.Y < -1 * oRadius)
                 {
-                    pos.Y = Game1.screenHeight + oRadius;
+                    pos.Y = Util.GetScreen().Y + oRadius;
                 }
             }
 
