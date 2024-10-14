@@ -38,15 +38,16 @@ namespace Scene.GameScenes
         public Texture2D coinSprite;
         public SpriteFont font1;
 
-        public static double mainGameStartTime;
+        public double mainGameStartTime;
         public static bool gameGoing;
 
         private Color testColor;
 
-        public MainGameScene(ContentManager contentManager, SceneManager sceneManager)
+        public MainGameScene(ContentManager contentManager, SceneManager sceneManager, double gameTime)
         {
             this.contentManager = contentManager;
             this.sceneManager = sceneManager;
+            this.mainGameStartTime = gameTime;
 
             Vector2 screen = Util.GetScreen();
             screenWidth = screen.X;

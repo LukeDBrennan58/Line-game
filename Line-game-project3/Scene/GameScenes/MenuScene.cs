@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,8 @@ namespace Scene.GameScenes
         private float screenWidth;
         private float screenHeight;
 
-        private Button button1;
+        private HashSet<Button> buttons;
+        private Button activeButton;
 
         private Color backGroundColor;
         private ColorCycle buttonColor;
@@ -39,36 +41,51 @@ namespace Scene.GameScenes
 
             backGroundColor = JsonProps.GetColor("background");
             buttonColor = new(JsonProps.GetColor("button"), JsonProps.GetColor("lightButton"));
-            borderColor = new(Color.Black, Color.DarkGray);
+            borderColor = new(Color.Black, new Color(60,60,60));
 
-            button1 = new((int)screenWidth / 2, (int)screenHeight * 3 / 5,
+            Button button1 = new((int)screenWidth / 3, (int)screenHeight * 3 / 5,
                     180, 60,
-                    buttonColor, borderColor);
+                    new(buttonColor), new(borderColor),
+                    "startGame");
+
+            Button button2 = new((int)screenWidth * 2 / 3, (int)screenHeight * 3 / 5,
+                    180, 60,
+                    new(buttonColor), new(borderColor),
+                    "secondButton");
+
+            buttons = new HashSet<Button>();
+            buttons.Add(button1);
+            buttons.Add(button2);
         }
         public void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            foreach(Button button in buttons)
             {
-                MainGameScene.mainGameStartTime = gameTime.TotalGameTime.Milliseconds;
-                sceneManager.ChangeScene(new MainGameScene(contentManager, sceneManager));
-            }
+                if (button.GetRectangle().Contains(Mouse.GetState().Position.ToVector2()))
+                {
+                    button.fill.SetColor(1);
+                    button.border.SetColor(1);
 
-            if(button1.GetRectangle().Contains(Mouse.GetState().Position.ToVector2()))
-            {
-                button1.fill.SetColor(1);
-                button1.border.SetColor(1);
-            }
-            else
-            {
-                button1.fill.SetColor(0);
-                button1.border.SetColor(0);
+                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        sceneManager.ChangeScene(button.GetNewScene(contentManager, sceneManager, gameTime.TotalGameTime.Milliseconds));
+                    }
+                }
+                else
+                {
+                    button.fill.SetColor(0);
+                    button.border.SetColor(0);
+                }
             }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.FillRectangle(button1.GetRectangle(), button1.fill);
-            spriteBatch.DrawRectangle(button1.GetRectangle(), button1.border, 3, 0);
+            foreach(Button button in buttons)
+            {
+                spriteBatch.FillRectangle(button.GetRectangle(), button.fill);
+                spriteBatch.DrawRectangle(button.GetRectangle(), button.border, 3, 0);
+            }
             spriteBatch.End();
         }
 

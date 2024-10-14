@@ -24,6 +24,12 @@ namespace Tools
             this.reference = colors[0];
         }
 
+        public ColorCycle(ColorCycle colorCycle)
+        {
+            this.colors = colorCycle.colors;
+            this.reference = colorCycle.reference;
+        }
+
         public void SetColor(int index)
         {
             reference = colors[index];
