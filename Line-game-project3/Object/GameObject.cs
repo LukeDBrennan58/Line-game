@@ -32,7 +32,7 @@ namespace Object
         public void SetSprite(Texture2D sprite)
         {
             this.sprite = sprite;
-            dim = Util.PointToVector(sprite.Bounds.Size);
+            dim = Util.PTV(sprite.Bounds.Size);
             radius = dim.X / 2;
             oRadius = radius * 1.25f;
         }

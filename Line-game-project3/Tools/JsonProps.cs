@@ -15,33 +15,39 @@ namespace Tools
         public static JsonElement root;
         public static void Start()
         {
-            string file = "properties.json";
-            string json;
-            if (File.Exists(file))
+            if(root.ValueKind == JsonValueKind.Undefined)
             {
-                json = File.ReadAllText(file);
-            }
-            else
-            {
-                throw new FileNotFoundException("properties.json file is missing");
-            }
+                string file = "properties.json";
+                string json;
+                if (File.Exists(file))
+                {
+                    json = File.ReadAllText(file);
+                }
+                else
+                {
+                    throw new FileNotFoundException("properties.json file is missing");
+                }
 
-            JsonDocument doc = JsonDocument.Parse(json);
-            root = doc.RootElement;
+                JsonDocument doc = JsonDocument.Parse(json);
+                root = doc.RootElement;
+            }
         }
 
         public static JsonElement Get(string key)
         {
+            Start();
             return root.GetProperty(key);
         }
 
         public static JsonElement Get(string key, string key2)
         {
+            Start();
             return root.GetProperty(key).GetProperty(key2);
         }
 
         public static Vector2 GetVector(string key, string key2)
         {
+            Start();
             JsonElement element = Get(key, key2);
             return new Vector2(
                     element.GetProperty("X").GetInt16(),
@@ -50,8 +56,19 @@ namespace Tools
 
         public static int GetInt(string key, string key2)
         {
+            Start();
             JsonElement element = Get(key, key2);
             return element.GetInt16();
+        }
+
+        public static Color GetColor(string key)
+        {
+            Start();
+            JsonElement element = Get("colors", key);
+            return new Color(
+                    element.GetProperty("R").GetInt16(),
+                    element.GetProperty("G").GetInt16(),
+                    element.GetProperty("B").GetInt16());
         }
     }
 }

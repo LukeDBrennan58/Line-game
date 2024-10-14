@@ -23,6 +23,10 @@ namespace Scene.GameScenes
 
         private Button button1;
 
+        private Color backGroundColor;
+        private ColorCycle buttonColor;
+        private ColorCycle borderColor;
+
         public MenuScene(ContentManager contentManager, SceneManager sceneManager)
         {
             this.contentManager = contentManager;
@@ -33,7 +37,13 @@ namespace Scene.GameScenes
             screenHeight = Util.GetScreen().Y;
             screenWidth = Util.GetScreen().X;
 
-            button1 = new((int)screenWidth / 2, (int)screenHeight * 3 / 5, 180, 60);
+            backGroundColor = JsonProps.GetColor("background");
+            buttonColor = new(JsonProps.GetColor("button"), JsonProps.GetColor("lightButton"));
+            borderColor = new(Color.Black, Color.DarkGray);
+
+            button1 = new((int)screenWidth / 2, (int)screenHeight * 3 / 5,
+                    180, 60,
+                    buttonColor, borderColor);
         }
         public void Update(GameTime gameTime)
         {
@@ -42,11 +52,23 @@ namespace Scene.GameScenes
                 MainGameScene.mainGameStartTime = gameTime.TotalGameTime.Milliseconds;
                 sceneManager.ChangeScene(new MainGameScene(contentManager, sceneManager));
             }
+
+            if(button1.GetRectangle().Contains(Mouse.GetState().Position.ToVector2()))
+            {
+                button1.fill.SetColor(1);
+                button1.border.SetColor(1);
+            }
+            else
+            {
+                button1.fill.SetColor(0);
+                button1.border.SetColor(0);
+            }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            spriteBatch.DrawRectangle(button1.GetRectangle(), button1.color, 3);
+            spriteBatch.FillRectangle(button1.GetRectangle(), button1.fill);
+            spriteBatch.DrawRectangle(button1.GetRectangle(), button1.border, 3, 0);
             spriteBatch.End();
         }
 

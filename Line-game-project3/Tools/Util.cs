@@ -31,7 +31,7 @@ namespace Tools
             return x > min - 10 && x < max + 10;
         }
 
-        public static Vector2 PointToVector(Point point)
+        public static Vector2 PTV(Point point)
         {
             return new Vector2(point.X, point.Y);
         }
