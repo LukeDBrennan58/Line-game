@@ -19,11 +19,12 @@ namespace Scene.GameScenes
         private ContentManager contentManager;
         private SceneManager sceneManager;
 
+        private SpriteFont font1;
+
         private float screenWidth;
         private float screenHeight;
 
         private HashSet<Button> buttons;
-        private Button activeButton;
 
         private Color backGroundColor;
         private ColorCycle buttonColor;
@@ -36,6 +37,8 @@ namespace Scene.GameScenes
         }
         public void Load()
         {
+            font1 = contentManager.Load<SpriteFont>("font1");
+
             screenHeight = Util.GetScreen().Y;
             screenWidth = Util.GetScreen().X;
 
@@ -46,12 +49,12 @@ namespace Scene.GameScenes
             Button button1 = new((int)screenWidth / 3, (int)screenHeight * 3 / 5,
                     180, 60,
                     new(buttonColor), new(borderColor),
-                    "startGame");
+                    "Start Game");
 
             Button button2 = new((int)screenWidth * 2 / 3, (int)screenHeight * 3 / 5,
                     180, 60,
                     new(buttonColor), new(borderColor),
-                    "secondButton");
+                    "Extra Button");
 
             buttons = new HashSet<Button>();
             buttons.Add(button1);
@@ -81,10 +84,12 @@ namespace Scene.GameScenes
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+            spriteBatch.DrawString(font1, "Line Game", new(screenWidth / 2, screenHeight / 3), Color.Red, 0, Util.Origin(font1, "Line Game"), 3, new SpriteEffects(), 0);
             foreach(Button button in buttons)
             {
                 spriteBatch.FillRectangle(button.GetRectangle(), button.fill);
                 spriteBatch.DrawRectangle(button.GetRectangle(), button.border, 3, 0);
+                spriteBatch.DrawString(font1, button.text, button.pos, button.border, 0, Util.Origin(font1, button.text), 2, new SpriteEffects(), 0);
             }
             spriteBatch.End();
         }

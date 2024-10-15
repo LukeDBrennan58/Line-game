@@ -35,5 +35,11 @@ namespace Tools
         {
             return new Vector2(point.X, point.Y);
         }
+
+        public static Vector2 Origin(SpriteFont font, string text)
+        {
+            Vector2 textSize = font.MeasureString(text);
+            return new(textSize.X / 2, textSize.Y / 2);
+        }
     }
 }

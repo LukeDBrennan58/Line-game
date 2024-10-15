@@ -18,8 +18,7 @@ namespace Object
         public Vector2 dim;
         public ColorCycle border;
         public ColorCycle fill;
-
-        public string name;
+        public string text;
 
         public Button(Vector2 pos, Vector2 dim, ColorCycle fill, ColorCycle border, string name)
         {
@@ -27,7 +26,7 @@ namespace Object
             this.dim = dim;
             this.fill = fill;
             this.border = border;
-            this.name = name;
+            this.text = name;
         }
 
         public Button(int posX, int posY, int width, int height, ColorCycle fill, ColorCycle border, string name)
@@ -36,7 +35,7 @@ namespace Object
             this.dim = new Vector2(width, height);
             this.fill = fill;
             this.border = border;
-            this.name = name;
+            this.text = name;
         }
 
         public RectangleF GetRectangle()
@@ -46,7 +45,7 @@ namespace Object
 
         public IScene GetNewScene(ContentManager contentManager, SceneManager sceneManager, double gameTime)
         {
-            if(name == "startGame")
+            if(text == "Start Game")
             {
                 return new MainGameScene(contentManager, sceneManager, gameTime);
             }
@@ -59,7 +58,7 @@ namespace Object
 
         public static implicit operator string(Button button)
         {
-            return button.name;
+            return button.text;
         }
 
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Object
 {
-    public class Coin : GameObject
+    public class Coin : Consumable
     {
 
         public Coin(Vector2 pos, Coin coinP)
